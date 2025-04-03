@@ -1,0 +1,107 @@
+port: 7890
+allow-lan: true
+mode: rule
+log-level: info
+external-controller: 127.0.0.1:9090
+unified-delay: false
+tcp-concurrent: true
+geodata-mode: true
+dns:
+    enable: true
+    ipv6: false
+    default-nameserver: [223.5.5.5, 119.29.29.29]
+    enhanced-mode: fake-ip
+    fake-ip-range: 198.18.0.1/16
+    use-hosts: true
+    nameserver: ['https://dns.alidns.com/dns-query', '202.120.224.26', '202.96.199.133']
+    fallback: ['https://doh.dns.sb/dns-query', 'https://dns.cloudflare.com/dns-query', 'https://dns.twnic.tw/dns-query', 'tls://8.8.4.4:853']
+    fallback-filter: { geoip: true, ipcidr: [240.0.0.0/4, 0.0.0.0/32] }
+proxy-groups:
+  - name: 🔰 节点选择
+    type: select
+    proxies:
+      - ♻️ 自动选择
+      - DIRECT
+  - name: ♻️ 自动选择
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 600
+    proxies:
+      - DIRECT
+  - name: 📲 电报信息
+    type: select
+    proxies:
+      - 🔰 节点选择
+      - DIRECT
+  - name: 👨‍🎓 学术资源
+    type: select
+    proxies:
+      - DIRECT
+      - 🔰 节点选择
+  - name: 💱 加密货币
+    type: select
+    proxies:
+      - 🔰 节点选择
+      - ♻️ 自动选择
+      - DIRECT
+  - name: 🤖 AI服务
+    type: select
+    proxies:
+      - 🔰 节点选择
+      - ♻️ 自动选择
+      - DIRECT
+  - name: 🐟 漏网之鱼
+    type: select
+    proxies:
+      - 🔰 节点选择
+      - DIRECT
+      - ♻️ 自动选择
+  - name: 🎥 国外流媒体
+    type: select
+    proxies:
+      - 🔰 节点选择
+      - ♻️ 自动选择
+      - DIRECT
+  - name: Ⓜ️ 微软服务
+    type: select
+    proxies:
+      - DIRECT
+      - 🔰 节点选择
+      - ♻️ 自动选择
+rules:
+  # leahd.me
+  - IP-CIDR,209.38.129.38/32,DIRECT,no-resolve
+  # 自定义
+  - DOMAIN-KEYWORD,sci-hub,🔰 节点选择
+  - GEOSITE,category-games@cn,DIRECT
+  - GEOSITE,category-ai-chat-!cn,🤖 AI服务
+  - GEOSITE,category-cryptocurrency,💱 加密货币
+  - GEOSITE,youtube,🎥 国外流媒体
+  - GEOSITE,netflix,🎥 国外流媒体
+  - GEOSITE,spotify,🎥 国外流媒体
+    # google
+  - GEOIP,google,🤖 AI服务,no-resolve
+  - GEOSITE,google,🤖 AI服务
+  - GEOSITE,category-scholar-!cn,👨‍🎓 学术资源
+  - DOMAIN-SUFFIX,r2.cloudflarestorage.com,Ⓜ️ 微软服务
+  - GEOSITE,microsoft,Ⓜ️ 微软服务
+  - GEOSITE,icloud,DIRECT
+  # steam
+  - GEOSITE,steam@cn,DIRECT
+  - DOMAIN,steamcdn-a.akamaihd.net,DIRECT
+  - DOMAIN-SUFFIX,cm.steampowered.com,DIRECT
+  - DOMAIN-SUFFIX,steamserver.net,DIRECT
+  # porn
+  - GEOSITE,category-porn,🔰 节点选择
+  # telegram
+  - GEOIP,telegram,📲 电报信息,no-resolve
+  - GEOSITE,telegram,📲 电报信息
+  # synology
+  - IP-CIDR,10.184.146.31/32,DIRECT,no-resolve
+  # 绕过国内
+  - GEOSITE,cn,DIRECT
+  - GEOSITE,apple-cn,DIRECT
+  - GEOSITE,geolocation-!cn,🔰 节点选择
+  - GEOSITE,geolocation-cn,DIRECT
+  - GEOIP,CN,DIRECT,no-resolve
+  - MATCH,🔰 节点选择
