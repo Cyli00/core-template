@@ -13,8 +13,8 @@ dns:
     enhanced-mode: fake-ip
     fake-ip-range: 198.18.0.1/16
     use-hosts: true
-    nameserver: ['https://dns.alidns.com/dns-query', '202.120.224.26', '202.96.199.133']
-    fallback: ['https://doh.dns.sb/dns-query', 'https://dns.cloudflare.com/dns-query', 'https://dns.twnic.tw/dns-query', 'tls://8.8.4.4:853']
+    nameserver: ['https://dns.alidns.com/dns-query', 'https://202.120.224.26/dns-query', 'https://202.96.199.133/dns-query']
+    fallback: ['https://doh.dns.sb/dns-query', 'https://1.0.0.1/dns-query', 'https://dns.twnic.tw/dns-query', 'tls://8.8.4.4:853']
     fallback-filter: { geoip: true, ipcidr: [240.0.0.0/4, 0.0.0.0/32] }
 proxy-groups:
   - name: 🔰 节点选择
