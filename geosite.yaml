@@ -12,9 +12,15 @@ dns:
     default-nameserver: [223.5.5.5, 119.29.29.29]
     enhanced-mode: fake-ip
     fake-ip-range: 198.18.0.1/16
+    fake-ip-filter:
+      - '*.lan'
+      - 'localhost.ptlogin2.qq.com'
+      - 'dns.msftncsi.com'
+      - 'www.msftncsi.com'
+      - 'www.msftconnecttest.com'
     use-hosts: true
-    nameserver: ['https://dns.alidns.com/dns-query', 'https://202.120.224.26/dns-query', 'https://202.96.199.133/dns-query']
-    fallback: ['https://doh.dns.sb/dns-query', 'https://1.0.0.1/dns-query', 'https://dns.twnic.tw/dns-query', 'tls://8.8.4.4:853']
+    nameserver: ['https://doh.pub/dns-query', 'https://dns.alidns.com/dns-query']
+    fallback: ['https://doh.dns.sb/dns-query', 'https://dns.cloudflare.com/dns-query', 'https://dns.twnic.tw/dns-query', 'tls://8.8.4.4:853']
     fallback-filter: { geoip: true, ipcidr: [240.0.0.0/4, 0.0.0.0/32] }
 proxy-groups:
   - name: 🔰 节点选择
@@ -26,48 +32,48 @@ proxy-groups:
     type: url-test
     url: http://www.gstatic.com/generate_204
     interval: 600
-    proxies:
-      - DIRECT
   - name: 📲 电报信息
     type: select
     proxies:
       - 🔰 节点选择
-      - DIRECT
+      - ♻️ 自动选择
+    # 正则表达，只选择港+倍率x1,x3的节点
+    filter: "港.*x[1|3]"
   - name: 👨‍🎓 学术资源
     type: select
     proxies:
       - DIRECT
       - 🔰 节点选择
+      - ♻️ 自动选择
   - name: 💱 加密货币
     type: select
     proxies:
       - 🔰 节点选择
-      - ♻️ 自动选择
-      - DIRECT
+    # 正则表达，只选择台湾或者新加坡的节点
+    filter: "台湾|新加坡"
   - name: 🤖 AI服务
     type: select
     proxies:
       - 🔰 节点选择
-      - ♻️ 自动选择
-      - DIRECT
+    # 正则表达，只选择美国+家宽节点
+    filter: "美国.*家宽"
   - name: 🐟 漏网之鱼
     type: select
     proxies:
       - 🔰 节点选择
-      - DIRECT
-      - ♻️ 自动选择
   - name: 🎥 国外流媒体
     type: select
     proxies:
       - 🔰 节点选择
       - ♻️ 自动选择
-      - DIRECT
+    # 正则表达，只选择流媒体节点
+    filter: "流媒体"
   - name: Ⓜ️ 微软服务
     type: select
     proxies:
-      - DIRECT
       - 🔰 节点选择
       - ♻️ 自动选择
+    filter: "美国"
 rules:
   # leahd.me
   - IP-CIDR,209.38.129.38/32,DIRECT,no-resolve
