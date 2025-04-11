@@ -76,7 +76,7 @@ proxy-groups:
     filter: "美国"
 rules:
   # leahd.me
-  - IP-CIDR,209.38.129.38/32,DIRECT,no-resolve
+  - IP-CIDR,137.184.39.114/32,DIRECT,no-resolve
   # 自定义
   - DOMAIN-KEYWORD,sci-hub,🔰 节点选择
   - GEOSITE,category-games@cn,DIRECT
